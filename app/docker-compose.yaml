@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  webapp:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - socket_server
+    volumes:
+      - .:/app
+  socket_server:
+    build: .
+    command: python /app/socket_server.py
+    ports:
+      - "5001:5000"  # Зміна зовнішнього порту на 5001
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
